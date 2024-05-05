@@ -51,7 +51,8 @@ final PkAdvertencia id = ; // PkAdvertencia |
 final AdvertenciaDTO advertenciaDTO = ; // AdvertenciaDTO | 
 
 try {
-    api.advertenciaControllerAlterar(id, advertenciaDTO);
+    final response = await api.advertenciaControllerAlterar(id, advertenciaDTO);
+    print(response);
 } catch on DioException (e) {
     print("Exception when calling AdvertenciaControllerApi->advertenciaControllerAlterar: $e\n");
 }
@@ -60,7 +61,7 @@ try {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://192.168.1.9:8080*
+All URIs are relative to *http://192.168.1.5:8080*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -194,7 +195,18 @@ Class | Method | HTTP request | Description
  - [MatriculaVisualizarDTO](doc/MatriculaVisualizarDTO.md)
  - [MessageResponse](doc/MessageResponse.md)
  - [NecessidadeEspecialDTO](doc/NecessidadeEspecialDTO.md)
+ - [PageAdvertenciaDTO](doc/PageAdvertenciaDTO.md)
+ - [PageEnderecoDTO](doc/PageEnderecoDTO.md)
+ - [PageInformacoesMatriculaDTO](doc/PageInformacoesMatriculaDTO.md)
+ - [PageMatriculaDTO](doc/PageMatriculaDTO.md)
+ - [PageNecessidadeEspecialDTO](doc/PageNecessidadeEspecialDTO.md)
+ - [PagePessoaDTO](doc/PagePessoaDTO.md)
+ - [PageResponsavelDTO](doc/PageResponsavelDTO.md)
+ - [PageTurmaDTO](doc/PageTurmaDTO.md)
+ - [PageTutorDTO](doc/PageTutorDTO.md)
+ - [PageUsuarioDTO](doc/PageUsuarioDTO.md)
  - [Pageable](doc/Pageable.md)
+ - [PageableObject](doc/PageableObject.md)
  - [PessoaDTO](doc/PessoaDTO.md)
  - [PkAdvertencia](doc/PkAdvertencia.md)
  - [PkResponsavel](doc/PkResponsavel.md)
@@ -202,6 +214,7 @@ Class | Method | HTTP request | Description
  - [ResponsavelDTO](doc/ResponsavelDTO.md)
  - [SearchField](doc/SearchField.md)
  - [SearchFieldValue](doc/SearchFieldValue.md)
+ - [SortObject](doc/SortObject.md)
  - [TurmaDTO](doc/TurmaDTO.md)
  - [TutorDTO](doc/TutorDTO.md)
  - [UsuarioDTO](doc/UsuarioDTO.md)

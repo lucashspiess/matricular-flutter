@@ -1,65 +1,107 @@
-import 'dart:ui';
-
-// import 'package:first_flutter_application/routes.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+import 'package:matricular/matricular.dart';
+import 'package:matricular_flutter/app/utils/config_state.dart';
 import 'package:matricular_flutter/routes.dart';
+import 'package:provider/provider.dart';
 import 'package:routefly/routefly.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:signals/signals.dart';
 import 'package:signals/signals_flutter.dart';
-// import 'package:routefly/routefly.dart';
+
+import '../api/AppAPI.dart';
+import 'login_state.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  static Route<void> route() {
+    return MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => MultiProvider(
+          providers: [
+            Provider(
+              create: (_) => context.read<ConfigState>(),
+              dispose: (_, instance) => instance.dispose(),
+            ),
+            Provider(create: (_) => context.read<AppAPI>())
+          ],
+          child: const LoginPage(),
+        )
+    );
+  }
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final url = signal('');
+  LoginState state = LoginState();
+  late AppAPI appAPI;
+  late Matricular matriculaApi;
 
-  final login = signal('');
-  final password = signal('');
+  void showMessage(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message, style: const TextStyle(fontSize: 22.0)),
+    ));
+  }
 
-  late final isValid =
-  computed(() => login().isNotEmpty && password().isNotEmpty);
-  final passwordError = signal<String?>(null);
-
-  validateForm() async {
+  validateForm(BuildContext context) async {
     var ok = false;
-    if (password().length >= 6) {
-      passwordError.value = null;
+    if (state.password().length > 4) {
+      state.passwordError.value = null;
       ok = true;
     } else {
-      passwordError.value = 'Erro! Mínimo de 6 caracteres';
+      state.passwordError.value = 'Erro! Mínimo de 6 caracteres';
     }
 
-    if(ok){
-      Routefly.pushNavigate(routePaths.home);
+    if (ok) {
+      final authApi = matriculaApi.getAuthAPIApi();
+      //if(authApi ==  null) return;
+
+      try {
+        var authBuilder = AuthDTOBuilder();
+        authBuilder.login = state.login();
+        authBuilder.senha = state.password();
+        debugPrint(authBuilder.build().toString());
+
+        final responseList = await authApi.login(authDTO: authBuilder.build());
+        debugPrint("Dados do Login");
+        debugPrint(responseList.data.toString());
+        if (responseList.statusCode == 200) {
+          appAPI.config.token.set(responseList.data!.accessToken ?? "");
+
+          Routefly.navigate(routePaths.matricula.home);
+        } else {
+          message() {
+            showMessage(context, "Login Falhou: ${responseList.data}");
+          }
+          message();
+        }
+      } on DioException catch (e) {
+        MessageResponseBuilder responseBuilder = MessageResponseBuilder();
+        responseBuilder.message = e.response?.data["message"];
+        responseBuilder.status = e.response?.data["status"];
+        responseBuilder.error = e.response?.data["error"];
+        responseBuilder.code = e.response?.data["code"];
+        MessageResponse response = responseBuilder.build();
+
+
+        message() {
+
+          showMessage(context, "Login Falhou: ${response.message}");
+        }
+        message();
+        print(
+            "Exception when calling: $e\n${e.response}");
+      }
+      ;
     }
   }
 
-    @override
-    void initState() {
-      _loadPreferences();
-      super.initState();
-    }
-
-    void _loadPreferences() {
-      SchedulerBinding.instance.scheduleFrameCallback((timeStamp) async {
-        final prefs = await SharedPreferences.getInstance();
-        url.set(prefs.getString('URL') ?? 'http://192.168.1.9');
-      });
-    }
-
   @override
   Widget build(BuildContext context) {
-    _LoginPageState();
+    appAPI = context.read<AppAPI>();
+    matriculaApi = appAPI.api;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -81,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Image(
-                        image: AssetImage("images/logo.png"),
+                        image: AssetImage("./images/logo.png"),
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -94,9 +136,9 @@ class _LoginPageState extends State<LoginPage> {
               Flexible(
                   flex: 3,
                   child: TextField(
-                    onChanged: login.set,
+                    onChanged: this.state.login.set,
                     decoration: const InputDecoration(
-                        border: OutlineInputBorder(), label: Text("email")),
+                        border: OutlineInputBorder(), label: Text("cpf")),
                   )),
               const Spacer(
                 flex: 1,
@@ -104,11 +146,11 @@ class _LoginPageState extends State<LoginPage> {
               Flexible(
                   flex: 3,
                   child: TextField(
-                    onChanged: password.set,
+                    onChanged: this.state.password.set,
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(),
-                        label: const Text("password"),
-                        errorText: passwordError.watch(context)),
+                        label: const Text("senha"),
+                        errorText: this.state.passwordError.watch(context)),
                     enableSuggestions: false,
                     autocorrect: false,
                     obscureText: true,
@@ -118,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Flexible(
                   flex: 2,
                   child: Text(
-                    'Forget password',
+                    'Esqueceu a senha',
                   ),
                 ),
               ),
@@ -128,7 +170,9 @@ class _LoginPageState extends State<LoginPage> {
                   widthFactor: 0.4,
                   heightFactor: 0.4,
                   child: FilledButton(
-                    onPressed: validateForm,
+                    onPressed: this.state.isValid.watch(context)
+                        ? () => {validateForm(context)}
+                        : null,
                     child: const Text('Login'),
                   ),
                 ),

@@ -5,7 +5,7 @@
 import 'package:matricular/api.dart';
 ```
 
-All URIs are relative to *http://192.168.1.9:8080*
+All URIs are relative to *http://192.168.1.5:8080*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -65,7 +65,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **turmaControllerAlterar**
-> turmaControllerAlterar(id, turmaDTO)
+> TurmaDTO turmaControllerAlterar(id, turmaDTO)
 
 
 
@@ -80,7 +80,8 @@ final int id = 789; // int |
 final TurmaDTO turmaDTO = ; // TurmaDTO | 
 
 try {
-    api.turmaControllerAlterar(id, turmaDTO);
+    final response = api.turmaControllerAlterar(id, turmaDTO);
+    print(response);
 } catch on DioException (e) {
     print('Exception when calling TurmaControllerApi->turmaControllerAlterar: $e\n');
 }
@@ -95,7 +96,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**TurmaDTO**](TurmaDTO.md)
 
 ### Authorization
 
@@ -109,7 +110,7 @@ void (empty response body)
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **turmaControllerIncluir**
-> turmaControllerIncluir(turmaDTO)
+> TurmaDTO turmaControllerIncluir(turmaDTO)
 
 
 
@@ -123,7 +124,8 @@ final api = Matricular().getTurmaControllerApi();
 final TurmaDTO turmaDTO = ; // TurmaDTO | 
 
 try {
-    api.turmaControllerIncluir(turmaDTO);
+    final response = api.turmaControllerIncluir(turmaDTO);
+    print(response);
 } catch on DioException (e) {
     print('Exception when calling TurmaControllerApi->turmaControllerIncluir: $e\n');
 }
@@ -137,7 +139,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**TurmaDTO**](TurmaDTO.md)
 
 ### Authorization
 
@@ -151,7 +153,7 @@ void (empty response body)
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **turmaControllerListAll**
-> turmaControllerListAll()
+> BuiltList<TurmaDTO> turmaControllerListAll()
 
 
 
@@ -164,7 +166,8 @@ import 'package:matricular/api.dart';
 final api = Matricular().getTurmaControllerApi();
 
 try {
-    api.turmaControllerListAll();
+    final response = api.turmaControllerListAll();
+    print(response);
 } catch on DioException (e) {
     print('Exception when calling TurmaControllerApi->turmaControllerListAll: $e\n');
 }
@@ -175,7 +178,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-void (empty response body)
+[**BuiltList&lt;TurmaDTO&gt;**](TurmaDTO.md)
 
 ### Authorization
 
@@ -189,7 +192,7 @@ void (empty response body)
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **turmaControllerListAllPage**
-> turmaControllerListAllPage(page)
+> PageTurmaDTO turmaControllerListAllPage(page)
 
 
 
@@ -203,7 +206,8 @@ final api = Matricular().getTurmaControllerApi();
 final Pageable page = ; // Pageable | 
 
 try {
-    api.turmaControllerListAllPage(page);
+    final response = api.turmaControllerListAllPage(page);
+    print(response);
 } catch on DioException (e) {
     print('Exception when calling TurmaControllerApi->turmaControllerListAllPage: $e\n');
 }
@@ -217,7 +221,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**PageTurmaDTO**](PageTurmaDTO.md)
 
 ### Authorization
 
@@ -231,7 +235,7 @@ void (empty response body)
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **turmaControllerObterPorId**
-> turmaControllerObterPorId(id)
+> TurmaDTO turmaControllerObterPorId(id)
 
 
 
@@ -245,7 +249,8 @@ final api = Matricular().getTurmaControllerApi();
 final int id = 789; // int | 
 
 try {
-    api.turmaControllerObterPorId(id);
+    final response = api.turmaControllerObterPorId(id);
+    print(response);
 } catch on DioException (e) {
     print('Exception when calling TurmaControllerApi->turmaControllerObterPorId: $e\n');
 }
@@ -259,7 +264,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**TurmaDTO**](TurmaDTO.md)
 
 ### Authorization
 
@@ -273,7 +278,7 @@ void (empty response body)
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **turmaControllerRemover**
-> turmaControllerRemover(id)
+> TurmaDTO turmaControllerRemover(id)
 
 
 
@@ -287,7 +292,8 @@ final api = Matricular().getTurmaControllerApi();
 final int id = 789; // int | 
 
 try {
-    api.turmaControllerRemover(id);
+    final response = api.turmaControllerRemover(id);
+    print(response);
 } catch on DioException (e) {
     print('Exception when calling TurmaControllerApi->turmaControllerRemover: $e\n');
 }
@@ -301,7 +307,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**TurmaDTO**](TurmaDTO.md)
 
 ### Authorization
 
@@ -315,7 +321,7 @@ void (empty response body)
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **turmaControllerSearchFieldsAction**
-> turmaControllerSearchFieldsAction(searchFieldValue)
+> BuiltList<TurmaDTO> turmaControllerSearchFieldsAction(searchFieldValue)
 
 
 
@@ -329,7 +335,8 @@ final api = Matricular().getTurmaControllerApi();
 final BuiltList<SearchFieldValue> searchFieldValue = ; // BuiltList<SearchFieldValue> | 
 
 try {
-    api.turmaControllerSearchFieldsAction(searchFieldValue);
+    final response = api.turmaControllerSearchFieldsAction(searchFieldValue);
+    print(response);
 } catch on DioException (e) {
     print('Exception when calling TurmaControllerApi->turmaControllerSearchFieldsAction: $e\n');
 }
@@ -343,7 +350,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**BuiltList&lt;TurmaDTO&gt;**](TurmaDTO.md)
 
 ### Authorization
 
@@ -357,7 +364,7 @@ void (empty response body)
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **turmaControllerSearchFieldsActionPage**
-> turmaControllerSearchFieldsActionPage(searchFieldValue, page, size, sort)
+> PageTurmaDTO turmaControllerSearchFieldsActionPage(searchFieldValue, page, size, sort)
 
 
 
@@ -374,7 +381,8 @@ final int size = 56; // int |
 final BuiltList<String> sort = ; // BuiltList<String> | 
 
 try {
-    api.turmaControllerSearchFieldsActionPage(searchFieldValue, page, size, sort);
+    final response = api.turmaControllerSearchFieldsActionPage(searchFieldValue, page, size, sort);
+    print(response);
 } catch on DioException (e) {
     print('Exception when calling TurmaControllerApi->turmaControllerSearchFieldsActionPage: $e\n');
 }
@@ -391,7 +399,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-void (empty response body)
+[**PageTurmaDTO**](PageTurmaDTO.md)
 
 ### Authorization
 

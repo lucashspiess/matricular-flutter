@@ -22,7 +22,7 @@ void main() {
 
     // Concede o token de acesso ao Usuário através do 'login' e 'senha'.
     //
-    //Future<BuiltList<CredencialDTO>> login(AuthDTO authDTO) async
+    //Future<CredencialDTO> login(AuthDTO authDTO) async
     test('test login', () async {
       // TODO
     });

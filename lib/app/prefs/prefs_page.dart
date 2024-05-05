@@ -27,7 +27,7 @@ class _PrefsPageState extends State<PrefsPage> {
     //WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
     SchedulerBinding.instance.scheduleFrameCallback((timeStamp) async {
       final prefs = await SharedPreferences.getInstance();
-      url.set(prefs.getString('URL') ?? 'http://192.168.1.9');
+      url.set(prefs.getString('URL') ?? 'http://192.168.1.5');
       urlTextController.text = url();
       //setState(() {});
     });

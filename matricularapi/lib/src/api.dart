@@ -22,7 +22,7 @@ import 'package:matricular/src/api/tutor_controller_api.dart';
 import 'package:matricular/src/api/usuario_controller_api.dart';
 
 class Matricular {
-  static const String basePath = r'http://192.168.1.9:8080';
+  static const String basePath = 'http://192.168.1.5:8080';
 
   final Dio dio;
   final Serializers serializers;

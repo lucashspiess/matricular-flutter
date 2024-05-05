@@ -14,6 +14,7 @@ import 'package:matricular/src/model/matricula_dto.dart';
 import 'package:matricular/src/model/matricula_listagem_dto.dart';
 import 'package:matricular/src/model/matricula_visualizar_dto.dart';
 import 'package:matricular/src/model/message_response.dart';
+import 'package:matricular/src/model/page_matricula_dto.dart';
 import 'package:matricular/src/model/pageable.dart';
 import 'package:matricular/src/model/search_field.dart';
 import 'package:matricular/src/model/search_field_value.dart';
@@ -38,9 +39,9 @@ class MatriculaControllerApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future]
+  /// Returns a [Future] containing a [Response] with a [MatriculaDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<void>> matriculaControllerAlterar({
+  Future<Response<MatriculaDTO>> matriculaControllerAlterar({
     required int id,
     required MatriculaDTO matriculaDTO,
     CancelToken? cancelToken,
@@ -97,7 +98,36 @@ class MatriculaControllerApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _response;
+    MatriculaDTO? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(MatriculaDTO),
+            ) as MatriculaDTO;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<MatriculaDTO>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
   }
 
   /// matriculaControllerAtualizaContraChequeMatricula
@@ -624,9 +654,9 @@ class MatriculaControllerApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future]
+  /// Returns a [Future] containing a [Response] with a [MatriculaDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<void>> matriculaControllerIncluir({
+  Future<Response<MatriculaDTO>> matriculaControllerIncluir({
     required MatriculaDTO matriculaDTO,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -681,7 +711,36 @@ class MatriculaControllerApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _response;
+    MatriculaDTO? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(MatriculaDTO),
+            ) as MatriculaDTO;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<MatriculaDTO>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
   }
 
   /// matriculaControllerListAll
@@ -695,9 +754,9 @@ class MatriculaControllerApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future]
+  /// Returns a [Future] containing a [Response] with a [BuiltList<MatriculaDTO>] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<void>> matriculaControllerListAll({
+  Future<Response<BuiltList<MatriculaDTO>>> matriculaControllerListAll({
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? extra,
@@ -732,7 +791,37 @@ class MatriculaControllerApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _response;
+    BuiltList<MatriculaDTO>? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType:
+                  const FullType(BuiltList, [FullType(MatriculaDTO)]),
+            ) as BuiltList<MatriculaDTO>;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<BuiltList<MatriculaDTO>>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
   }
 
   /// matriculaControllerListAllPage
@@ -747,9 +836,9 @@ class MatriculaControllerApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future]
+  /// Returns a [Future] containing a [Response] with a [PageMatriculaDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<void>> matriculaControllerListAllPage({
+  Future<Response<PageMatriculaDTO>> matriculaControllerListAllPage({
     required Pageable page,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -791,7 +880,36 @@ class MatriculaControllerApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _response;
+    PageMatriculaDTO? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(PageMatriculaDTO),
+            ) as PageMatriculaDTO;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<PageMatriculaDTO>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
   }
 
   /// matriculaControllerListAllPageMatriculaListagemDTO
@@ -1090,9 +1208,9 @@ class MatriculaControllerApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future]
+  /// Returns a [Future] containing a [Response] with a [MatriculaDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<void>> matriculaControllerObterPorId({
+  Future<Response<MatriculaDTO>> matriculaControllerObterPorId({
     required int id,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -1129,7 +1247,36 @@ class MatriculaControllerApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _response;
+    MatriculaDTO? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(MatriculaDTO),
+            ) as MatriculaDTO;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<MatriculaDTO>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
   }
 
   /// matriculaControllerRemover
@@ -1144,9 +1291,9 @@ class MatriculaControllerApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future]
+  /// Returns a [Future] containing a [Response] with a [MatriculaDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<void>> matriculaControllerRemover({
+  Future<Response<MatriculaDTO>> matriculaControllerRemover({
     required int id,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -1183,7 +1330,36 @@ class MatriculaControllerApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _response;
+    MatriculaDTO? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(MatriculaDTO),
+            ) as MatriculaDTO;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<MatriculaDTO>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
   }
 
   /// matriculaControllerSearchFieldsAction
@@ -1198,9 +1374,10 @@ class MatriculaControllerApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future]
+  /// Returns a [Future] containing a [Response] with a [BuiltList<MatriculaDTO>] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<void>> matriculaControllerSearchFieldsAction({
+  Future<Response<BuiltList<MatriculaDTO>>>
+      matriculaControllerSearchFieldsAction({
     required BuiltList<SearchFieldValue> searchFieldValue,
     CancelToken? cancelToken,
     Map<String, dynamic>? headers,
@@ -1256,7 +1433,37 @@ class MatriculaControllerApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _response;
+    BuiltList<MatriculaDTO>? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType:
+                  const FullType(BuiltList, [FullType(MatriculaDTO)]),
+            ) as BuiltList<MatriculaDTO>;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<BuiltList<MatriculaDTO>>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
   }
 
   /// matriculaControllerSearchFieldsActionPage
@@ -1274,9 +1481,9 @@ class MatriculaControllerApi {
   /// * [onSendProgress] - A [ProgressCallback] that can be used to get the send progress
   /// * [onReceiveProgress] - A [ProgressCallback] that can be used to get the receive progress
   ///
-  /// Returns a [Future]
+  /// Returns a [Future] containing a [Response] with a [PageMatriculaDTO] as data
   /// Throws [DioException] if API call or serialization fails
-  Future<Response<void>> matriculaControllerSearchFieldsActionPage({
+  Future<Response<PageMatriculaDTO>> matriculaControllerSearchFieldsActionPage({
     required BuiltList<SearchFieldValue> searchFieldValue,
     int? page = 0,
     int? size = 5,
@@ -1351,7 +1558,36 @@ class MatriculaControllerApi {
       onReceiveProgress: onReceiveProgress,
     );
 
-    return _response;
+    PageMatriculaDTO? _responseData;
+
+    try {
+      final rawResponse = _response.data;
+      _responseData = rawResponse == null
+          ? null
+          : _serializers.deserialize(
+              rawResponse,
+              specifiedType: const FullType(PageMatriculaDTO),
+            ) as PageMatriculaDTO;
+    } catch (error, stackTrace) {
+      throw DioException(
+        requestOptions: _response.requestOptions,
+        response: _response,
+        type: DioExceptionType.unknown,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+
+    return Response<PageMatriculaDTO>(
+      data: _responseData,
+      headers: _response.headers,
+      isRedirect: _response.isRedirect,
+      requestOptions: _response.requestOptions,
+      redirects: _response.redirects,
+      statusCode: _response.statusCode,
+      statusMessage: _response.statusMessage,
+      extra: _response.extra,
+    );
   }
 
   /// matriculaControllerSearchFieldsList
