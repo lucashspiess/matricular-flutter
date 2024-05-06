@@ -16,7 +16,8 @@ class StartPage extends StatelessWidget {
   static Route<void> route() {
     return MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (context) => MultiProvider(
+        builder: (context) =>
+            MultiProvider(
               providers: [
                 Provider(
                   create: (_) => context.read<ConfigState>(),
@@ -43,12 +44,16 @@ class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MatriculaControllerApi? matriculaApi =
-        context.read<AppAPI>().api.getMatriculaControllerApi();
-    debugPrint("home-page-matriculaApi:$matriculaApi");
-    debugPrint("Build Home page matricula");
+    context
+        .read<AppAPI>()
+        .api
+        .getMatriculaControllerApi();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme
+            .of(context)
+            .colorScheme
+            .inversePrimary,
         title: Text('Home da aplicação '),
       ),
       body: FutureBuilder<Response<BuiltList<MatriculaDTO>>>(
@@ -75,7 +80,10 @@ class StartPage extends StatelessWidget {
       AsyncSnapshot<Response<BuiltList<MatriculaDTO>>> snapshot,
       BuildContext context) {
     MatriculaControllerApi? matriculaControllerApi =
-        context.read<AppAPI>().api.getMatriculaControllerApi();
+    context
+        .read<AppAPI>()
+        .api
+        .getMatriculaControllerApi();
     if (snapshot.hasData) {
       return ListView.builder(
         itemCount: snapshot.data?.data?.length,
@@ -83,41 +91,49 @@ class StartPage extends StatelessWidget {
           debugPrint("Index:${index}");
           return Center(
               child: Container(
-            //height: 100,
-            //width: 200,
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              color: Colors.blue.withAlpha(70),
-              elevation: 10,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.account_box, size: 60),
-                    title: Text("nome:${snapshot.data!.data?[index].nome}",
-                        style: TextStyle(fontSize: 22.0)),
-                    subtitle: Text("status:${snapshot.data!.data?[index].cpf}",
-                        style: TextStyle(fontSize: 18.0)),
+                //height: 100,
+                //width: 200,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
-                  ButtonBar(
+                  color: Colors.blue.withAlpha(70),
+                  elevation: 10,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      ElevatedButton(
-                        child: const Text('Gerar Termo'),
-                        onPressed: () {
-                          matriculaControllerApi.matriculaControllerGerarTermo(
-                              id: snapshot.data!.data?[index].id ?? 0,
-                              cpfTutor: snapshot.data!.data?[index].responsaveis
+                      ListTile(
+                        leading: Icon(Icons.account_box, size: 60),
+                        title: Text("nome: ${snapshot.data!.data?[index].nome}",
+                            style: TextStyle(fontSize: 22.0)),
+                        subtitle: Text("CPF: ${snapshot.data!.data?[index]
+                            .cpf}",
+                            style: TextStyle(fontSize: 18.0)),
+                      ),
+                      ButtonBar(
+                        children: <Widget>[
+                          ElevatedButton(
+                            child: const Text('Gerar Termo'),
+                            onPressed: () {
+                              matriculaControllerApi
+                                  .matriculaControllerGerarTermo(
+                                  id: snapshot.data!.data?[index].id ?? 0,
+                                  cpfTutor: snapshot.data!.data?[index]
+                                      .responsaveis
                                       ?.first.cpfResponsavel ??
-                                  "");
-                        },
-                      )],
+                                      "").then((value) => {
+                              matriculaControllerApi.matriculaControllerGetTermo(
+                              caminhodoc:
+                              "Termo-Responsabilidade-${snapshot.data!.data?[index].cpf ?? ""}.pdf")
+                              });
+                            },
+                          )
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          ));
+                ),
+              ));
         },
       );
     } else if (snapshot.hasError) {
@@ -127,10 +143,8 @@ class StartPage extends StatelessWidget {
     }
   }
 
-  Text buildItemList(
-      AsyncSnapshot<Response<BuiltList<MatriculaDTO>>> snapshot, int index) {
-    debugPrint("coisa");
-    debugPrint(snapshot.data.toString());
+  Text buildItemList(AsyncSnapshot<Response<BuiltList<MatriculaDTO>>> snapshot,
+      int index) {
     return Text("nome:${snapshot.data!.data?[index]}");
   }
 }
