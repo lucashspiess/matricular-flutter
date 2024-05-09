@@ -93,6 +93,27 @@ class StartPage extends StatelessWidget {
     }
   }
 
+  void _exibirPopupDeMensagem(BuildContext context, String fileName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Download'),
+          content: Text('Download do arquivo $fileName realizado com sucesso.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Fechar o popup
+                Navigator.of(context).pop();
+              },
+              child: Text('Fechar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     MatriculaControllerApi? matriculaApi =
@@ -167,7 +188,8 @@ class StartPage extends StatelessWidget {
                                         .matriculaControllerGetTermo(
                                             caminhodoc:
                                                 "Termo-Responsabilidade-${snapshot.data!.data?[index].cpf ?? ""}.pdf").then((value) => {
-                                                  writeFile(value.data, snapshot.data!.data?[index].cpf)
+                                                  writeFile(value.data, snapshot.data!.data?[index].cpf),
+                                                  _exibirPopupDeMensagem(context, "termo-responsabilidade-${snapshot.data!.data?[index].cpf}.pdf")
                                     })
                                   });
                         },
@@ -181,6 +203,7 @@ class StartPage extends StatelessWidget {
         },
       );
     } else if (snapshot.hasError) {
+      Routefly.navigate(routePaths.login);
       return Text('Erro ao acessar dados');
     } else {
       return CircularProgressIndicator();
