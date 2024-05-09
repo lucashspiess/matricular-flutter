@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Image(
-                        image: AssetImage("./images/logo.png"),
+                        image: AssetImage("./assets/logo.png"),
                         fit: BoxFit.contain,
                       ),
                     ),
