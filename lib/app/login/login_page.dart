@@ -117,11 +117,11 @@ class _LoginPageState extends State<LoginPage> {
               const Flexible(
                 flex: 6,
                 child: FractionallySizedBox(
-                  widthFactor: 0.6,
+                  widthFactor: 0.8,
                   child: FittedBox(
                     fit: BoxFit.fitHeight,
                     child: Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(0),
                       child: Image(
                         image: AssetImage("./assets/logo.png"),
                         fit: BoxFit.contain,
@@ -174,20 +174,6 @@ class _LoginPageState extends State<LoginPage> {
                         ? () => {validateForm(context)}
                         : null,
                     child: const Text('Login'),
-                  ),
-                ),
-              ),
-              const Spacer(
-                flex: 2,
-              ),
-              Flexible(
-                flex: 2,
-                child: TextButton(
-                  onPressed: () {
-                    Routefly.push(routePaths.prefs);
-                  },
-                  child: const Text(
-                    'Alterar URL Servidor:',
                   ),
                 ),
               ),
