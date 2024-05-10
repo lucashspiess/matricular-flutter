@@ -1,19 +1,16 @@
 import 'dart:async';
+import 'dart:io';
 // import 'dart:html';
 import 'dart:typed_data';
-import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter/services.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:matricular/matricular.dart';
 import 'package:matricular_flutter/app/api/AppAPI.dart';
 import 'package:matricular_flutter/app/utils/config_state.dart';
 import 'package:matricular_flutter/routes.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:routefly/routefly.dart';
 
@@ -35,51 +32,11 @@ class StartPage extends StatelessWidget {
             ));
   }
 
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/termo-responsabilidade.pdf');
-  }
-
   void writeFile(Uint8List? bytes, String? fileName) async {
-    final file = await _localFile;
+    final file = File('/storage/emulated/0/Download/termo-responsabilidade-$fileName.pdf');
 
     // Write the file
      file.writeAsBytesSync(bytes!);
-     saveFile("termo-responsabilidade-$fileName.pdf");
-  }
-
-  Future<void> saveFile(String fileName) async {
-    var file = File('');
-    final filePath = await _localPath;
-
-    // Platform.isIOS comes from dart:io
-    if (Platform.isIOS) {
-      final dir = await getApplicationDocumentsDirectory();
-      file = File('${dir.path}/$fileName');
-    }
-    if (Platform.isAndroid) {
-      var status = await Permission.storage.status;
-      if (status != PermissionStatus.granted) {
-        status = await Permission.storage.request();
-      }
-      if (status.isGranted) {
-        const downloadsFolderPath = '/storage/emulated/0/Download/';
-        Directory dir = Directory(downloadsFolderPath);
-        file = File('${dir.path}/$fileName');
-      }
-    }
-    final byteData = await rootBundle.load("$filePath/termo-responsabilidade.pdf");
-    try {
-      await file.writeAsBytes(byteData.buffer
-          .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-    } on FileSystemException catch (err) {
-      // handle error
-    }
   }
 
   Future<Response<BuiltList<MatriculaDTO>>> _getData(
