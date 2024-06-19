@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
+
 // import 'dart:html';
 import 'dart:typed_data';
 
@@ -32,11 +34,12 @@ class StartPage extends StatelessWidget {
             ));
   }
 
-  void writeFile(Uint8List? bytes, String? fileName) async {
-    final file = File('/storage/emulated/0/Download/termo-responsabilidade-$fileName.pdf');
+  void writeFile(Uint8List? bytes, int? fileName) async {
+    final file =
+        File('/storage/emulated/0/Download/${fileName}_Dados-Matricula.pdf');
 
     // Write the file
-     file.writeAsBytesSync(bytes!);
+    file.writeAsBytesSync(bytes!);
   }
 
   Future<Response<BuiltList<MatriculaDTO>>> _getData(
@@ -77,8 +80,20 @@ class StartPage extends StatelessWidget {
         context.read<AppAPI>().api.getMatriculaControllerApi();
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Home da aplicação '),
+        backgroundColor: Colors.blue[300],
+        title: Text('Matrículas', style: TextStyle(color: Colors.white)),
+        leading: IconButton(
+            icon: Icon(Icons.add, color: Colors.white),
+            onPressed: () {
+              Routefly.navigate(routePaths.matricula.home);
+            }),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.logout, color: Colors.white),
+              onPressed: () {
+                Routefly.navigate(routePaths.login);
+              })
+        ],
       ),
       body: FutureBuilder<Response<BuiltList<MatriculaDTO>>>(
           future: _getData(matriculaApi),
@@ -87,13 +102,18 @@ class StartPage extends StatelessWidget {
             return buildListView(snapshot, context);
           }),
       bottomNavigationBar: Container(
-          color: Colors.blue,
+          color: Colors.blue[300],
           child: Row(
             children: [
               IconButton(
-                  icon: Icon(Icons.home),
+                  icon: Icon(Icons.person, color: Colors.white),
                   onPressed: () {
-                    Routefly.navigate(routePaths.login);
+                    Routefly.navigate(routePaths.matricula.home);
+                  }),
+              IconButton(
+                  icon: Icon(Icons.chair_alt, color: Colors.white),
+                  onPressed: () {
+                    Routefly.navigate(routePaths.turma.list);
                   })
             ],
           )),
@@ -110,21 +130,77 @@ class StartPage extends StatelessWidget {
         itemCount: snapshot.data?.data?.length,
         itemBuilder: (BuildContext context, int index) {
           return Center(
-              child: Container(
+              child: Dismissible(
+            key: UniqueKey(),
+            direction: DismissDirection.horizontal,
+            onDismissed: (DismissDirection direction) {
+              if (direction == DismissDirection.endToStart) {
+                matriculaControllerApi.matriculaControllerRemover(
+                    id: snapshot.data!.data?[index].id ?? 0);
+              }
+            },
+            background: const ColoredBox(
+              color: Colors.orange,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Icon(Icons.pending_rounded, color: Colors.white),
+                ),
+              ),
+            ),
+            secondaryBackground: const ColoredBox(
+              color: Colors.red,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Icon(Icons.delete, color: Colors.white),
+                ),
+              ),
+            ),
+            confirmDismiss: (DismissDirection direction) async {
+              if (direction == DismissDirection.endToStart) {
+                final confirmed = await showDialog<bool>(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text(
+                          'Tem certeza que deseja excluir a matrícula?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: const Text('Não'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: const Text('Sim'),
+                        )
+                      ],
+                    );
+                  },
+                );
+                log('Deletion confirmed: $confirmed');
+                return confirmed;
+              } else {
+                log("editar");
+              }
+            },
             //height: 100,
             //width: 200,
             child: Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
+                borderRadius: BorderRadius.circular(5.0),
               ),
-              color: Colors.blue.withAlpha(70),
+              color: Theme.of(context).colorScheme.inversePrimary,
               elevation: 10,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   ListTile(
-                    leading: Icon(Icons.account_box, size: 60),
-                    title: Text("nome: ${snapshot.data!.data?[index].nome}",
+                    leading: Icon(Icons.person_rounded,
+                        size: 100, color: Colors.white),
+                    title: Text("Nome: ${snapshot.data!.data?[index].nome}",
                         style: TextStyle(fontSize: 22.0)),
                     subtitle: Text("CPF: ${snapshot.data!.data?[index].cpf}",
                         style: TextStyle(fontSize: 18.0)),
@@ -132,22 +208,24 @@ class StartPage extends StatelessWidget {
                   ButtonBar(
                     children: <Widget>[
                       ElevatedButton(
-                        child: const Text('Gerar Termo'),
+                        child: const Text('Baixar matricula'),
                         onPressed: () {
                           matriculaControllerApi
-                              .matriculaControllerGerarTermo(
-                                  id: snapshot.data!.data?[index].id ?? 0,
-                                  cpfTutor: snapshot.data!.data?[index]
-                                          .responsaveis?.first.cpfResponsavel ??
-                                      "")
+                              .matriculaControllerGerarPdfDados(
+                                  id: snapshot.data!.data?[index].id ?? 0)
                               .then((value) => {
                                     matriculaControllerApi
                                         .matriculaControllerGetTermo(
                                             caminhodoc:
-                                                "Termo-Responsabilidade-${snapshot.data!.data?[index].cpf ?? ""}.pdf").then((value) => {
-                                                  writeFile(value.data, snapshot.data!.data?[index].cpf),
-                                                  _exibirPopupDeMensagem(context, "termo-responsabilidade-${snapshot.data!.data?[index].cpf}.pdf")
-                                    })
+                                                "${snapshot.data!.data?[index].id}_Dados-Matricula.pdf")
+                                        .then((value) => {
+                                              writeFile(
+                                                  value.data,
+                                                  snapshot
+                                                      .data!.data?[index].id),
+                                              _exibirPopupDeMensagem(context,
+                                                  "${snapshot.data!.data?[index].id}_Dados-Matricula.pdf")
+                                            })
                                   });
                         },
                       )

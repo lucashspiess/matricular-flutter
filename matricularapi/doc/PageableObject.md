@@ -10,8 +10,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **offset** | **int** |  | [optional] 
 **sort** | [**SortObject**](SortObject.md) |  | [optional] 
-**pageSize** | **int** |  | [optional] 
 **pageNumber** | **int** |  | [optional] 
+**pageSize** | **int** |  | [optional] 
 **paged** | **bool** |  | [optional] 
 **unpaged** | **bool** |  | [optional] 
 

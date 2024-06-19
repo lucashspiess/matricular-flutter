@@ -1,4 +1,4 @@
-// Openapi Generator last run: : 2024-05-05T12:00:03.845648
+// Openapi Generator last run: : 2024-06-17T19:23:52.971912
 import 'package:openapi_generator_annotations/openapi_generator_annotations.dart';
 //dart run build_runner build  --delete-conflicting-outputs -v
 @Openapi(

@@ -104,8 +104,8 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Tela de login'),
+        backgroundColor: Colors.blue[300],
+        title: const Text('Tela de login', style: TextStyle(color: Colors.white)),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -170,10 +170,13 @@ class _LoginPageState extends State<LoginPage> {
                   widthFactor: 0.4,
                   heightFactor: 0.4,
                   child: FilledButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.inversePrimary)
+                    ),
                     onPressed: this.state.isValid.watch(context)
                         ? () => {validateForm(context)}
                         : null,
-                    child: const Text('Login'),
+                    child: const Text('Login', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ),
